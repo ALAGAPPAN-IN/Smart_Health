@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Smart Health System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <h1>🏥 Smart Health System</h1>
+
+        <p class="welcome" id="welcome"></p>
+
+        <h3 id="count"></h3>
+
+        <button onclick="window.location.href='appointment.html'">
+            Book Appointment
+        </button>
+
+        <button onclick="window.location.href='history.html'">
+            View History
+        </button>
+
+        <button class="logout-btn" onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+    <script>
+
+        // Display logged-in user's name
+        let userName = localStorage.getItem("loggedInUser");
+
+        if (userName) {
+            document.getElementById("welcome").innerHTML =
+                "Welcome " + userName;
+        } else {
+            document.getElementById("welcome").innerHTML =
+                "Welcome Guest";
+        }
+
+        // Display total appointments
+        let appointments =
+            JSON.parse(localStorage.getItem("appointments")) || [];
+
+        document.getElementById("count").innerHTML =
+            "Total Appointments : " + appointments.length;
+
+        // Logout function
+        function logout() {
+
+            localStorage.removeItem("loggedInUser");
+
+            alert("Logged Out Successfully");
+
+            window.location.href = "login.html";
+        }
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment History</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>🏥 Smart Health System</h1>
+        <p class="welcome">
+            Appointment History
+        </p>
+
+        <h3 id="count"></h3>
+
+        <input type="text" id="searchDoctor" placeholder="Search Doctor">
+
+        <button onclick="searchAppointment()">
+            Search
+        </button>
+
+        <button onclick="displayAppointments()">
+            Show All
+        </button>
+
+        <div id="history"></div>
+
+        <button onclick="window.location.href='dashboard.html'">
+
+            Back to Dashboard
+
+        </button>
+
+        <button class="clear-btn" onclick="clearHistory()">
+
+            Clear History
+
+        </button>
+
+    </div>
+
+    <script>
+
+        displayAppointments();
+
+        function displayAppointments() {
+
+            let appointments =
+                JSON.parse(
+                    localStorage.getItem("appointments")
+                ) || [];
+
+            document.getElementById("count").innerHTML =
+                "Total Appointments : " + appointments.length;
+
+            let output = "";
+
+            if (appointments.length == 0) {
+
+                output =
+                    "<p>No Appointment Found</p>";
+
+            }
+
+            else {
+
+                for (let i = 0; i < appointments.length; i++) {
+
+                    output += `
+
+            <div class="history-card">
+
+                <p>
+                <b>Doctor :</b>
+                ${appointments[i].doctor}
+                </p>
+
+                <p>
+                <b>Department :</b>
+                ${appointments[i].department}
+                </p>
+
+                <p>
+                <b>Date :</b>
+                ${appointments[i].date}
+                </p>
+
+                <p>
+                <b>Time :</b>
+                ${appointments[i].time}
+                </p>
+
+                <button
+                class="edit-btn"
+                onclick="editAppointment(${i})">
+
+                Edit
+
+                </button>
+
+                <button
+                class="delete-btn"
+                onclick="deleteAppointment(${i})">
+
+                Delete
+
+                </button>
+
+            </div>
+
+            `;
+
+                }
+
+            }
+
+            document.getElementById("history").innerHTML =
+                output;
+
+        }
+
+        function searchAppointment() {
+
+            let searchValue =
+                document.getElementById("searchDoctor")
+                    .value
+                    .toLowerCase()
+                    .trim();
+
+            let appointments =
+                JSON.parse(
+                    localStorage.getItem("appointments")
+                ) || [];
+
+            let output = "";
+
+            let foundCount = 0;
+
+            for (let i = 0; i < appointments.length; i++) {
+
+                if (
+
+                    appointments[i]
+                        .doctor
+                        .toLowerCase()
+                        .includes(searchValue)
+
+                ) {
+
+                    foundCount++;
+
+                    output += `
+
+            <div class="history-card">
+
+                <p>
+                <b>Doctor :</b>
+                ${appointments[i].doctor}
+                </p>
+
+                <p>
+                <b>Department :</b>
+                ${appointments[i].department}
+                </p>
+
+                <p>
+                <b>Date :</b>
+                ${appointments[i].date}
+                </p>
+
+                <p>
+                <b>Time :</b>
+                ${appointments[i].time}
+                </p>
+
+                <button
+                class="edit-btn"
+                onclick="editAppointment(${i})">
+
+                Edit
+
+                </button>
+
+                <button
+                class="delete-btn"
+                onclick="deleteAppointment(${i})">
+
+                Delete
+
+                </button>
+
+            </div>
+
+            `;
+
+                }
+
+            }
+
+            document.getElementById("count").innerHTML =
+                "Found Appointments : " + foundCount;
+
+            if (output == "") {
+
+                output =
+                    "<p>No matching appointment found</p>";
+
+            }
+
+            document.getElementById("history").innerHTML =
+                output;
+
+        }
+
+        function editAppointment(index) {
+
+            localStorage.setItem(
+                "editIndex",
+                index
+            );
+
+            window.location.href =
+                "appointment.html";
+
+        }
+
+        function deleteAppointment(index) {
+
+            let appointments =
+                JSON.parse(
+                    localStorage.getItem("appointments")
+                ) || [];
+
+            appointments.splice(index, 1);
+
+            localStorage.setItem(
+                "appointments",
+                JSON.stringify(appointments)
+            );
+
+            alert("Appointment Deleted");
+
+            displayAppointments();
+
+        }
+
+        function clearHistory() {
+
+            if (confirm("Are you sure?")) {
+
+                localStorage.removeItem(
+                    "appointments"
+                );
+
+                document.getElementById("count").innerHTML =
+                    "Total Appointments : 0";
+
+                displayAppointments();
+
+            }
+
+        }
+    </script>
+</body>
+
+</html>
