@@ -127,14 +127,46 @@
             let appointment = {
 
                 doctor: doctor,
+
                 department: department,
+
                 date: date,
-                time: time
+
+                time: time,
+
+                status: "Pending"
 
             };
 
             let appointments =
                 JSON.parse(localStorage.getItem("appointments")) || [];
+            for (let i = 0; i < appointments.length; i++) {
+
+                if (
+
+                    appointments[i].doctor === doctor &&
+
+                    appointments[i].date === date &&
+
+                    appointments[i].time === time
+
+                ) {
+
+                    if (editIndex != null && i == editIndex) {
+
+                        continue;
+
+                    }
+
+                    alert(
+                        "Doctor is already booked.\nPlease choose another slot."
+                    );
+
+                    return;
+
+                }
+
+            }
 
             if (editIndex !== null) {
 
